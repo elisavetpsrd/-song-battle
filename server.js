@@ -1,5 +1,6 @@
 const express=require('express');const http=require('http');const {Server}=require('socket.io');const path=require('path');
 const app=express(),server=http.createServer(app),io=new Server(server);app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(__dirname));
 const rooms={}; const code=()=>String(Math.floor(1000+Math.random()*9000));
 io.on('connection',s=>{
  s.on('create',cb=>{let c;do c=code();while(rooms[c]);rooms[c]={score:{A:0,B:0},buzz:null};s.join(c);s.data={room:c,host:true};cb(c);io.to(c).emit('state',rooms[c]);});
